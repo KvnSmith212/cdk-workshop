@@ -3,6 +3,7 @@ import * as codecommit from '@aws-cdk/aws-codecommit';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 import { SimpleSynthAction, CdkPipeline } from "@aws-cdk/pipelines";
+import { WorkshopPipelineStage } from './pipeline-stage';
 
 export class WorkshopPipelineStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -30,6 +31,9 @@ export class WorkshopPipelineStack extends cdk.Stack {
                 cloudAssemblyArtifact,
                 buildCommand: 'npm run build'
             })
-        })
+        });
+
+        const deploy = new WorkshopPipelineStage(this, 'Deploy');
+        pipeline.addApplicationStage(deploy);
     }
 }
